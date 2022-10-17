@@ -25,7 +25,8 @@ resource "hcloud_server" "node1" {
   location = "${var.location}"
   server_type = "${var.server_type}"
   ssh_keys = ["${var.name}-key","ebartz"]
-  user_data = "templatefile('cloud-config.cfg', {runcmd = ${var.runcmd}})"
+  user_data = "#cloud-config\nruncmd:\n- ${var.runcmd}\n"
+  #user_data = "templatefile('cloud-config.cfg', {runcmd = ${var.runcmd}})"
 }
 
 output "private_ip" {
