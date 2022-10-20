@@ -5,13 +5,17 @@ variable "name" {}
 variable "server_type" {}
 variable "location" {}
 variable "runcmd" {
-  default = "echo 'no cloud init action' > /root/init-info.txt"
+  default = "echo 'hello from config' > /root/hello"
 }
 variable "ide" {
   default = false
 }
-locals {
-  user_data_string = "${var.ide ? "#cloud-config\nruncmd:\n- echo 'IDE true' > /root/ide-true.txt\n" : "#cloud-config\nruncmd:\n- ${var.runcmd}\n"}"
+
+data "template_file" "cloud-config" {
+  template = "${file("${path.module}/cloud-config.cfg")}"
+  vars = {
+    runcmd = "${var.runcmd}"
+  }
 }
 
 #Configure the Hetzner Cloud Provider
@@ -33,8 +37,9 @@ resource "hcloud_server" "node1" {
   location = "${var.location}"
   server_type = "${var.server_type}"
   ssh_keys = ["${var.name}-key","ebartz"]
-  user_data = "${local.user_data_string}"
+  #user_data = "${var.ide ? "#cloud-config\nruncmd:\n- echo 'IDE true' > /root/ide-true.txt\n" : "#cloud-config\nruncmd:\n- ${var.runcmd}\n"}"
   #user_data = "templatefile('cloud-config.cfg', {runcmd = ${var.runcmd}})"
+  user_data = "${cloud-config}"
 }
 
 output "private_ip" {
