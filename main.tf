@@ -39,7 +39,7 @@ resource "hcloud_server" "node1" {
   ssh_keys = ["${var.name}-key","ebartz"]
   #user_data = "${var.ide ? "#cloud-config\nruncmd:\n- echo 'IDE true' > /root/ide-true.txt\n" : "#cloud-config\nruncmd:\n- ${var.runcmd}\n"}"
   #user_data = "templatefile('cloud-config.cfg', {runcmd = ${var.runcmd}})"
-  user_data = "${cloud-config}"
+  user_data = "${data.template_file.cloud-config.rendered}"
 }
 
 output "private_ip" {
