@@ -10,6 +10,9 @@ variable "runcmd" {
 variable "ide" {
   default = false
 }
+locals {
+  user_data_string = (var.ide == true ? "#cloud-config\nruncmd:\n- echo 'IDE true' > /root/ide-true.txt\n" : "#cloud-config\nruncmd:\n- ${var.runcmd}\n")
+}
 
 #Configure the Hetzner Cloud Provider
 provider "hcloud" {
@@ -30,7 +33,7 @@ resource "hcloud_server" "node1" {
   location = "${var.location}"
   server_type = "${var.server_type}"
   ssh_keys = ["${var.name}-key","ebartz"]
-  user_data = ${var.ide} == true ? "#cloud-config\nruncmd:\n- echo 'IDE true' > /root/ide-true.txt\n" : "#cloud-config\nruncmd:\n- ${var.runcmd}\n"
+  user_data = local.user_data_string
   #user_data = "templatefile('cloud-config.cfg', {runcmd = ${var.runcmd}})"
 }
 
