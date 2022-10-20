@@ -4,10 +4,10 @@ variable "image" {}
 variable "name" {}
 variable "server_type" {}
 variable "location" {}
-#variable "runcmd" {
-#  default = "echo 'no cloud init action' > /root/init-info.txt"
-#  nullable = false #If not set, null values will overwrite default
-#}
+variable "runcmd" {
+  default = "echo 'no cloud init action' > /root/init-info.txt"
+  nullable = false #If not set, null values will overwrite default
+}
 
 #Configure the Hetzner Cloud Provider
 provider "hcloud" {
@@ -28,7 +28,7 @@ resource "hcloud_server" "node1" {
   location = "${var.location}"
   server_type = "${var.server_type}"
   ssh_keys = ["${var.name}-key","ebartz"]
-  #user_data = "#cloud-config\nruncmd:\n- ${var.runcmd}\n"
+  user_data = try("#cloud-config\nruncmd:\n- ${var.runcmd}\n", "#cloud-config\nruncmd:\n- touch init-empty.txt\n"
   #user_data = "templatefile('cloud-config.cfg', {runcmd = ${var.runcmd}})"
 }
 
