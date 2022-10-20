@@ -5,7 +5,7 @@ variable "name" {}
 variable "server_type" {}
 variable "location" {}
 variable "runcmd" {
-  default = ""
+  default = "echo 'no cloud init action' > /root/init-info.txt"
   nullable = false #If not set, null values will overwrite default
 }
 
@@ -28,7 +28,7 @@ resource "hcloud_server" "node1" {
   location = "${var.location}"
   server_type = "${var.server_type}"
   ssh_keys = ["${var.name}-key","ebartz"]
-  user_data = (var.runcmd != "" ? "#cloud-config\nruncmd:\n- ${var.runcmd}\n" : "#cloud-config\nruncmd:\n- echo 'no cloud init action' > /root/init-info.txt\n")
+  user_data = "#cloud-config\nruncmd:\n- ${var.runcmd}\n"
   #user_data = "templatefile('cloud-config.cfg', {runcmd = ${var.runcmd}})"
 }
 
