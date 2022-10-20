@@ -18,6 +18,13 @@ data "template_file" "cloud-config" {
   }
 }
 
+data "template_file" "cloud-config-ide" {
+  template = "${file("${path.module}/cloud-config-ide.cfg")}"
+  vars = {
+    runcmd = "${var.runcmd}"
+  }
+}
+
 #Configure the Hetzner Cloud Provider
 provider "hcloud" {
   version = "= 1.10"
@@ -39,7 +46,7 @@ resource "hcloud_server" "node1" {
   ssh_keys = ["${var.name}-key","ebartz"]
   #user_data = "${var.ide ? "#cloud-config\nruncmd:\n- echo 'IDE true' > /root/ide-true.txt\n" : "#cloud-config\nruncmd:\n- ${var.runcmd}\n"}"
   #user_data = "templatefile('cloud-config.cfg', {runcmd = ${var.runcmd}})"
-  user_data = "${data.template_file.cloud-config.rendered}"
+  user_data = "${var.ide ? "${data.template_file.cloud-config-ide.rendered}" : "${data.template_file.cloud-config.rendered}"}"
 }
 
 output "private_ip" {
