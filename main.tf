@@ -4,7 +4,9 @@ variable "image" {}
 variable "name" {}
 variable "server_type" {}
 variable "location" {}
-variable "runcmd" {}
+variable "runcmd" {
+  default = ""
+}
 
 #Configure the Hetzner Cloud Provider
 provider "hcloud" {
@@ -25,7 +27,7 @@ resource "hcloud_server" "node1" {
   location = "${var.location}"
   server_type = "${var.server_type}"
   ssh_keys = ["${var.name}-key","ebartz"]
-  user_data = (var.runcmd != "" ? "#cloud-config\nruncmd:\n- echo ${var.runcmd} > /root/echoed-cloud-init-runcmd\n" : "#cloud-config\nruncmd:\n- echo 'no cloud init action'\n")
+  user_data = (var.runcmd != "" ? "#cloud-config\nruncmd:\n- ${var.runcmd}\n" : "#cloud-config\nruncmd:\n- echo 'no cloud init action' > /root/init-info.txt\n")
   #user_data = "templatefile('cloud-config.cfg', {runcmd = ${var.runcmd}})"
 }
 
