@@ -6,6 +6,7 @@ variable "server_type" {}
 variable "location" {}
 variable "runcmd" {
   default = ""
+  nullable = false #If not set, null values will overwrite default
 }
 
 #Configure the Hetzner Cloud Provider
