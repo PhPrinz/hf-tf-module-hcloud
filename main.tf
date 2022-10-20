@@ -7,6 +7,9 @@ variable "location" {}
 variable "runcmd" {
   default = "echo 'no cloud init action' > /root/init-info.txt"
 }
+variable "IDE" {
+  default = false
+}
 
 #Configure the Hetzner Cloud Provider
 provider "hcloud" {
@@ -27,7 +30,7 @@ resource "hcloud_server" "node1" {
   location = "${var.location}"
   server_type = "${var.server_type}"
   ssh_keys = ["${var.name}-key","ebartz"]
-  user_data = "#cloud-config\nruncmd:\n- ${var.runcmd}\n"
+  user_data = (var.IDE ? "#cloud-config\nruncmd:\n- echo 'IDE true' > /root/ide-true.txt\n" : "#cloud-config\nruncmd:\n- ${var.runcmd}\n")
   #user_data = "templatefile('cloud-config.cfg', {runcmd = ${var.runcmd}})"
 }
 
