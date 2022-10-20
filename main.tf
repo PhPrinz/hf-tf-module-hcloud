@@ -30,7 +30,7 @@ resource "hcloud_server" "node1" {
   location = "${var.location}"
   server_type = "${var.server_type}"
   ssh_keys = ["${var.name}-key","ebartz"]
-  user_data = var.ide == true ? "#cloud-config\nruncmd:\n- echo 'IDE true' > /root/ide-true.txt\n" : "#cloud-config\nruncmd:\n- ${var.runcmd}\n"
+  user_data = ${var.ide} == true ? "#cloud-config\nruncmd:\n- echo 'IDE true' > /root/ide-true.txt\n" : "#cloud-config\nruncmd:\n- ${var.runcmd}\n"
   #user_data = "templatefile('cloud-config.cfg', {runcmd = ${var.runcmd}})"
 }
 
