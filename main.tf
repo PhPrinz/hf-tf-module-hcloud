@@ -6,7 +6,6 @@ variable "server_type" {}
 variable "location" {}
 variable "runcmd" {
   default = "echo 'no cloud init action' > /root/init-info.txt"
-  nullable = false #If not set, null values will overwrite default
 }
 
 #Configure the Hetzner Cloud Provider
