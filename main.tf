@@ -11,7 +11,7 @@ variable "ide" {
   default = false
 }
 locals {
-  user_data_string = (var.ide == true ? "#cloud-config\nruncmd:\n- echo 'IDE true' > /root/ide-true.txt\n" : "#cloud-config\nruncmd:\n- ${var.runcmd}\n")
+  user_data_string = (${var.ide} == "true" ? "#cloud-config\nruncmd:\n- echo 'IDE true' > /root/ide-true.txt\n" : "#cloud-config\nruncmd:\n- ${var.runcmd}\n")
 }
 
 #Configure the Hetzner Cloud Provider
