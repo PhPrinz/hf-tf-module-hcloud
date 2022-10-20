@@ -28,7 +28,7 @@ resource "hcloud_server" "node1" {
   location = "${var.location}"
   server_type = "${var.server_type}"
   ssh_keys = ["${var.name}-key","ebartz"]
-  user_data = try("#cloud-config\nruncmd:\n- ${var.runcmd}\n", "#cloud-config\nruncmd:\n- touch init-empty.txt\n"
+  user_data = try("#cloud-config\nruncmd:\n- ${var.runcmd}\n", "#cloud-config\nruncmd:\n- touch init-empty.txt\n")
   #user_data = "templatefile('cloud-config.cfg', {runcmd = ${var.runcmd}})"
 }
 
