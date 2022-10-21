@@ -5,7 +5,7 @@ variable "name" {}
 variable "server_type" {}
 variable "location" {}
 variable "runcmd" {
-  default = "echo 'hello from config' > /root/hello"
+  default = "echo ' '"
 }
 variable "ide" {
   default = false
