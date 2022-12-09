@@ -4,6 +4,7 @@ variable "image" {}
 variable "name" {}
 variable "server_type" {}
 variable "location" {}
+variable "cloud-config" {}
 variable "runcmd" {
   default = "echo ' '"
 }
@@ -46,7 +47,8 @@ resource "hcloud_server" "node1" {
   ssh_keys = ["${var.name}-key","ebartz"]
   #user_data = "${var.ide ? "#cloud-config\nruncmd:\n- echo 'IDE true' > /root/ide-true.txt\n" : "#cloud-config\nruncmd:\n- ${var.runcmd}\n"}"
   #user_data = "templatefile('cloud-config.cfg', {runcmd = ${var.runcmd}})"
-  user_data = "${var.ide ? "${data.template_file.cloud-config-ide.rendered}" : "${data.template_file.cloud-config.rendered}"}"
+  #user_data = "${var.ide ? "${data.template_file.cloud-config-ide.rendered}" : "${data.template_file.cloud-config.rendered}"}"
+  user_data = "${var.cloud-config}"
 }
 
 output "private_ip" {
